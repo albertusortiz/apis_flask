@@ -10,8 +10,10 @@ api_v1 = Blueprint('api', __name__, url_prefix='/api/v1')
 
 @api_v1.route('/tasks', methods=['GET'])
 def get_tasks():
+    page = int(request.args.get('page', 1)) #Diccionario
+    order = request.args.get('order', 'desc') #Diccionario
 
-    tasks = Task.query.all()
+    tasks = Task.get_by_page(order, page)
 
     return response([
         task.serialize() for task in tasks
