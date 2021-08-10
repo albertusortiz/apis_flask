@@ -8,6 +8,7 @@ from .responses import bad_request
 
 from .schemas import task_schema
 from .schemas import tasks_schema
+from .schemas import paramas_task_schema
 
 api_v1 = Blueprint('api', __name__, url_prefix='/api/v1')
 
@@ -43,15 +44,11 @@ def get_task(task):
 def create_task():
     # Getting the object that client send.
     json = request.get_json(force=True)
-
-    if json.get('title') is None or len(json['title']) > 50:
-        return bad_request()
-
-    if json.get('description') is None:
-        return bad_request()
-
-    if json.get('deadline') is None:
-        return bad_request()
+    # Error si el obejto JSON no cumple las reglas
+    error = paramas_task_schema.validate(json)
+    if error:
+        print(error)
+        return bad_request(error)
 
     task = Task.new(json['title'], json['description'], json['deadline'])
 

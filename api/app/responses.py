@@ -1,10 +1,10 @@
 from flask import json, jsonify
 
-def bad_request():
+def bad_request(error='Bad request'):
     return jsonify({
         'success': False,
         'data': {},
-        'message': 'Bad request',
+        'message': error,
         'code': 400
     }), 400
 
